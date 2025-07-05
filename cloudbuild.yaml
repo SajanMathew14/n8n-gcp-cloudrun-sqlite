@@ -2,37 +2,32 @@ options:
   logging: CLOUD_LOGGING_ONLY
 
 steps:
-# Build Docker image
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/my-n8n-on-gcp-cloud-run/n8n-sqlite:$SHORT_SHA', '.']
-
-# Push image to Container Registry
-- name: 'gcr.io/cloud-builders/docker'
-  args: ['push', 'gcr.io/my-n8n-on-gcp-cloud-run/n8n-sqlite:$SHORT_SHA']
-
-# Deploy to Cloud Run
-- name: 'gcr.io/cloud-builders/gcloud'
-  args:
-    - 'run'
-    - 'deploy'
-    - 'n8n-sqlite'
-    - '--image'
-    - 'gcr.io/my-n8n-on-gcp-cloud-run/n8n-sqlite:$SHORT_SHA'
-    - '--region'
-    - 'us-central1'
-    - '--platform'
-    - 'managed'
-    - '--memory'
-    - '512Mi'
-    - '--min-instances'
-    - '1'
-    - '--max-instances'
-    - '1'
-    - '--allow-unauthenticated'
-    - '--set-env-vars'
-    - 'N8N_DB_SQLITE_FILE=/mnt/data/database.sqlite'
-    - '--add-volume'
-    - 'name=volume-1,type=cloud-storage,bucket=my-n8n-on-gcp-cloud-run-n8n-vol,target=/mnt/data'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/my-n8n-on-gcp-cloud-run/n8n-sqlite:$SHORT_SHA'
+      - '.'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/my-n8n-on-gcp-cloud-run/n8n-sqlite:$SHORT_SHA'
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'n8n-sqlite'
+      - '--image=gcr.io/my-n8n-on-gcp-cloud-run/n8n-sqlite:$SHORT_SHA'
+      - '--region=us-central1'
+      - '--platform=managed'
+      - '--memory=512Mi'
+      - '--min-instances=1'
+      - '--max-instances=1'
+      - '--allow-unauthenticated'
+      - '--set-env-vars=N8N_DB_SQLITE_FILE=/mnt/data/database.sqlite'
+      - '--add-volume=name=volume-1,type=cloud-storage,bucket=my-n8n-on-gcp-cloud-run-n8n-vol'
+      - '--add-volume-mount=volume=volume-1,mount-path=/mnt/data'
 
 images:
   - 'gcr.io/my-n8n-on-gcp-cloud-run/n8n-sqlite:$SHORT_SHA'

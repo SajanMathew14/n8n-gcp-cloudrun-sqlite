@@ -5,9 +5,9 @@ USER root
 # Prepare data folder
 RUN mkdir -p /mnt/data && chown node:node /mnt/data
 
-# Copy startup helper script
+# Copy startup helper script and set proper ownership
 COPY startup.sh /home/node/startup.sh
-RUN chmod +x /home/node/startup.sh
+RUN chmod +x /home/node/startup.sh && chown node:node /home/node/startup.sh
 
 USER node
 

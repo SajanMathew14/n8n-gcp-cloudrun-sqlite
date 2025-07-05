@@ -15,16 +15,18 @@ echo "Disk space: $(df -h /mnt/data 2>/dev/null || echo 'Volume not yet mounted'
 
 # Wait for volume mount to be available with exponential backoff
 echo "Checking volume mount availability..."
-for i in {1..30}; do
+for i in {1..15}; do
     if [ -d "/mnt/data" ] && [ -w "/mnt/data" ]; then
         echo "Volume mount is ready at attempt $i"
         break
     fi
-    echo "Waiting for volume mount... (attempt $i/30)"
-    if [ $i -eq 30 ]; then
-        echo "ERROR: Volume mount failed after 30 attempts"
+    echo "Waiting for volume mount... (attempt $i/15)"
+    if [ $i -eq 15 ]; then
+        echo "ERROR: Volume mount failed after 15 attempts (30 seconds)"
         echo "Directory listing of /mnt:"
         ls -la /mnt/ || echo "Cannot list /mnt directory"
+        echo "Checking if /mnt/data exists but is not writable:"
+        ls -la /mnt/data || echo "/mnt/data does not exist"
         exit 1
     fi
     sleep 2

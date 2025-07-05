@@ -22,16 +22,16 @@ steps:
       - '--region=us-central1'
       - '--platform=managed'
       - '--execution-environment=gen2'
-      - '--memory=2Gi'
+      - '--memory=512Mi'
       - '--cpu=1'
       - '--min-instances=1'
       - '--max-instances=1'
       - '--port=8080'
       - '--timeout=600'
-      - '--cpu-boost'
       - '--set-env-vars=N8N_DB_SQLITE_FILE=/mnt/data/database.sqlite,N8N_HOST=0.0.0.0,N8N_PORT=8080,N8N_PROTOCOL=http,N8N_LOG_LEVEL=info,N8N_METRICS=true'
       - '--add-volume=name=volume-1,type=cloud-storage,bucket=my-n8n-on-gcp-cloud-run-n8n-vol'
       - '--add-volume-mount=volume=volume-1,mount-path=/mnt/data'
+      - '--allow-unauthenticated'
 
 images:
   - 'gcr.io/my-n8n-on-gcp-cloud-run/n8n-sqlite:$SHORT_SHA'

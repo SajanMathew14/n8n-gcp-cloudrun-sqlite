@@ -1,4 +1,7 @@
-#!/usr/bin/env bash
+#!/bin/bash
+set -e
 
-ln -sf /mnt/data /home/node/.n8n
-exec n8n
+echo "Launching n8n on port ${PORT:-8080}, DB at ${N8N_DB_SQLITE_FILE}"
+
+# Launch n8n in foreground listening on the required port
+n8n start --port="${PORT:-8080}"

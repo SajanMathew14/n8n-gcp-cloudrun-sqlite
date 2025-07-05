@@ -21,12 +21,11 @@ steps:
       - '--image=gcr.io/my-n8n-on-gcp-cloud-run/n8n-sqlite:$SHORT_SHA'
       - '--region=us-central1'
       - '--platform=managed'
-      - '--execution-environment=gen2'    # ← NEW: enables volume mounts
+      - '--execution-environment=gen2'
       - '--memory=512Mi'
       - '--min-instances=1'
       - '--max-instances=1'
-      - '--allow-unauthenticated'
-      - '--port=8080'                    # ← NEW: matches container listener port
+      - '--port=8080'
       - '--set-env-vars=N8N_DB_SQLITE_FILE=/mnt/data/database.sqlite'
       - '--add-volume=name=volume-1,type=cloud-storage,bucket=my-n8n-on-gcp-cloud-run-n8n-vol'
       - '--add-volume-mount=volume=volume-1,mount-path=/mnt/data'

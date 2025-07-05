@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 set -e
 
 # Set default values
@@ -15,7 +15,8 @@ echo "Disk space: $(df -h /mnt/data 2>/dev/null || echo 'Volume not yet mounted'
 
 # Wait for volume mount to be available with exponential backoff
 echo "Checking volume mount availability..."
-for i in {1..15}; do
+i=1
+while [ $i -le 15 ]; do
     if [ -d "/mnt/data" ] && [ -w "/mnt/data" ]; then
         echo "Volume mount is ready at attempt $i"
         break
@@ -30,6 +31,7 @@ for i in {1..15}; do
         exit 1
     fi
     sleep 2
+    i=$((i + 1))
 done
 
 # Verify we can write to the data directory
@@ -74,5 +76,12 @@ echo "=== Starting n8n ==="
 echo "Command: n8n start"
 echo "Timestamp: $(date)"
 
-# Launch n8n in foreground
+# Verify port configuration before starting
+echo "=== Port Configuration Verification ==="
+echo "PORT environment variable: ${PORT}"
+echo "N8N_PORT environment variable: ${N8N_PORT}"
+echo "N8N_HOST environment variable: ${N8N_HOST}"
+
+# Start n8n directly
+echo "=== Starting n8n in foreground ==="
 exec n8n start

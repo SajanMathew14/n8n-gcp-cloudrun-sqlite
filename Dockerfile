@@ -5,7 +5,8 @@ USER root
 # Prepare data folder
 RUN mkdir -p /mnt/data && chown node:node /mnt/data
 
-# Copy startup helper script and set proper ownership
+# Ensure home directory exists and copy startup script
+RUN mkdir -p /home/node
 COPY startup.sh /home/node/startup.sh
 RUN chmod +x /home/node/startup.sh && chown node:node /home/node/startup.sh
 
@@ -15,6 +16,7 @@ USER node
 EXPOSE 8080
 
 # Set n8n environment variables for Cloud Run
+ENV PORT=8080
 ENV N8N_HOST=0.0.0.0
 ENV N8N_PORT=8080
 ENV N8N_PROTOCOL=http

@@ -35,5 +35,3 @@ steps:
 
 images:
   - 'gcr.io/my-n8n-on-gcp-cloud-run/n8n-sqlite:$SHORT_SHA'
-
---set-env-vars=N8N_DB_SQLITE_FILE=/mnt/data/database.sqlite,N8N_HOST=n8n-sqlite-712139941733.us-central1.run.app,N8N_PROTOCOL=https,WEBHOOK_URL=https://n8n-sqlite-712139941733.us-central1.run.app
